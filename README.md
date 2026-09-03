@@ -102,16 +102,6 @@ The database stores information such as:
 
 The scrapers check existing job links to help prevent duplicate listings when they are run again.
 
-## Delete All Jobs
-
-If you want to remove all existing jobs and scrape fresh listings, run:
-
-```bash
-python delete_jobs.py
-```
-
-This deletes the jobs but keeps the database table.
-
 ## Job Sources
 
 Currently, jobs are collected from:
