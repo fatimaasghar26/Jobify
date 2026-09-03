@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobify - Jobs in Pakistan</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script>
+    function toggleTheme() {
+      document.documentElement.classList.toggle("dark");
+    }
+  </script>
+</head>
+
+<body>
+  <header>
+    <a href="/">Jobify</a>
+    <span>Entry-level & student jobs in Pakistan</span>
+    <nav>
+      <a href="/about">About</a>
+      <button onclick="toggleTheme()">Dark Mode</button>
+    </nav>
+  </header>
+  <main>
+    <!-- Search -->
+    <form method="GET" action="/">
+      <input type="text" name="search" placeholder="Search jobs..." value="{{ search_query }}">
+      <select name="category">
+        <option value="All">All Categories</option>
+        <option value="Internship">Internship</option>
+        <option value="Part-time">Part-time</option>
+        <option value="Entry-level">Entry-level</option>
+      </select>
+      <button type="submit">Search</button>
+    </form>
+    <p>
+      Showing {{ jobs|length }} of {{ total_jobs }} jobs.
+    </p>
+    <!-- Jobs -->
+    {% if jobs %}
+    {% for job in jobs %}
+    <div class="job">
+      <div>
+        <h2>{{ job[0] }}</h2>
+        <p>{{ job[1] }}</p>
+        <p>📍 {{ job[2] }}</p>
+        <span>{{ job[3] }}</span>
+      </div>
+      <div>
+        {% if job[7] is not none %}
+        {% if job[7] < 0 %} <p>Expired</p>
+          {% else %}
+          <p>{{ job[7] }} days left</p>
+          {% endif %}
+          {% else %}
+          <p>Deadline: {{ job[4] }}</p>
+          {% endif %}
+          <p>
+            {{ job[6] or "Not disclosed" }}
+          </p>
+          <a href="{{ job[5] }}" target="_blank">
+            Apply
+          </a>
+      </div>
+    </div>
+    {% endfor %}
+    <!-- Pagination -->
+    <div class="pagination">
+      {% if page > 1 %}
+      <a href="{{ url_for('home',
+                    category=selected_category,
+                    search=search_query,
+                    page=page - 1) }}">
+        Previous
+      </a>
+      {% endif %}
+      <span>
+        Page {{ page }} of {{ total_pages }}
+      </span>
+      {% if page < total_pages %} <a href="{{ url_for('home',
+                    category=selected_category,
+                    search=search_query,
+                    page=page + 1) }}">
+        Next
+        </a>
+        {% endif %}
+    </div>
+    {% else %}
+    <p>No jobs found.</p>
+    {% endif %}
+  </main>
+  <footer>
+    <p>© 2026 Jobify. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>
